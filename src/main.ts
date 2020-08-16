@@ -6,6 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors(); // protection
   const options = new DocumentBuilder()
     .setTitle('Organization')
     .setDescription('Sample Organization application using nestjs')
@@ -19,6 +20,6 @@ async function bootstrap() {
     transform: true,
     whitelist: true
   }));
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
