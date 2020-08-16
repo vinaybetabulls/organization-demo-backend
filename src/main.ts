@@ -7,7 +7,6 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors(); // protection
-  if (process.env.NODE_ENV !== 'production') {
     const options = new DocumentBuilder()
       .setTitle('Organization')
       .setDescription('Sample Organization application using nestjs')
@@ -17,7 +16,6 @@ async function bootstrap() {
       .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
-  }
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
     whitelist: true
