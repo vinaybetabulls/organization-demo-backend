@@ -15,9 +15,14 @@ export class CommonService {
      * 
      * @param {OrganizationRequestDto} request 
      */
-    async createConversation(request: OrganizationRequestDto): Promise<any> {
+    async createConversation(request: OrganizationRequestDto, decodeJWT: any): Promise<any> {
         request.orgId = uuidv4();
-        const org = new this.organiaztionModel(request);
+        const payload = {
+            ...request,
+            createdBy: {...decodeJWT}
+        }
+        console.log('payload..', payload);
+        const org = new this.organiaztionModel(payload);
         return org.save()
     }
 

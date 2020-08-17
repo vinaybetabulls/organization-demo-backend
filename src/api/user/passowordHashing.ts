@@ -1,7 +1,7 @@
 
 import * as bcrypt from 'bcryptjs';
 import *as jwt from 'jsonwebtoken';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 @Injectable()
 export class PasswordManipulation {
 
@@ -45,7 +45,7 @@ export class PasswordManipulation {
         try {
             return jwt.verify(userAuthToken, process.env.JWT_SECRETE_KEY)
         } catch (error) {
-            throw error
+            throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
         }
         
     }

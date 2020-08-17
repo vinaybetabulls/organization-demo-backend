@@ -7,15 +7,14 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors(); // protection
-    const options = new DocumentBuilder()
-      .setTitle('Organization')
-      .setDescription('Sample Organization application using nestjs')
-      .setVersion('1.0')
-      .addTag('Organization Demo')
-      .addBasicAuth({ in: 'header', type: 'http' })
-      .build();
-    const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('api', app, document);
+  const options = new DocumentBuilder()
+    .setTitle('Organization')
+    .setDescription('Sample Organization application using nestjs')
+    .setVersion('1.0')
+    .addTag('Organization Demo')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
     whitelist: true

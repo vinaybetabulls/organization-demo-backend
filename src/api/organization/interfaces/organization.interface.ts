@@ -5,4 +5,8 @@ export interface OrganizationInterace extends Document {
   readonly orgLocation: string;
   readonly orgCEO: string;
   organizationId: string;
+  createdBy: {
+    userId: { type: string },
+    email: { type: string }
+  }
 }

@@ -11,9 +11,9 @@ export class OrganizationService {
      * 
      * @param request 
      */
-    async createOrganization(request: OrganizationRequestDto): Promise<OrganizationRequestDto> {
+    async createOrganization(request: OrganizationRequestDto, decodeJWT: any): Promise<OrganizationRequestDto> {
         try {
-            return await this.common.createConversation(request);
+            return await this.common.createConversation(request, decodeJWT);
         } catch (error) {
             throw error;
         }
