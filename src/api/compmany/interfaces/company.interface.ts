@@ -4,6 +4,10 @@ export interface CompanyInterace extends Document {
   readonly companyName: string;
   readonly companyLocation: string;
   companyId: string;
+  readonly organization: {
+      readonly orgName: string,
+      readonly organizationId: string
+  }
   createdBy: {
       userId: string,
       email: string

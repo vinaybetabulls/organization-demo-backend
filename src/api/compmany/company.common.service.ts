@@ -17,7 +17,6 @@ export class CompanyCommonService {
     async createCompany(request: CompanyRequestDto, createdBy: any) {
         request.companyId = uuidv4();
         const payload = {...request, createdBy}
-        console.log(payload)
         const company = new this.companyModel(payload);
         return await company.save();
     }

@@ -19,7 +19,6 @@ export class CompanyController {
     async createCompany(@Body() request: CompanyRequestDto, @Headers('token') authorization: string) {
         try {
             const decodeToken = await this.jwt.validateJSONToken(authorization);
-            console.log(decodeToken.data.userId);
             const crearedBy = decodeToken.data;
             return await this.companyService.createCompany(request, crearedBy);
         } catch (error) {

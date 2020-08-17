@@ -36,7 +36,6 @@ export class CommonService {
         user.email = (user.email).toLowerCase()
         const UserModel = await new this.userModel(user);
         const userResponse = await UserModel.save();
-        console.log('user..', userResponse)
         return {
             email: userResponse.email,
             firstName: userResponse.firstName,

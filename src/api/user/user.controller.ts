@@ -34,11 +34,9 @@ export class UserController {
     @Get('/profile/:userId')
 
     async profile(@Param('userId') userId: string, @Headers('token') authorization) {
-        console.log(authorization);
         // validate jwt
         try {
             await this.jwt.validateJSONToken(authorization);
-            console.log(userId)
             const userProfile = this.user.profile(userId)
             return userProfile;
         } catch (error) {

@@ -7,6 +7,10 @@ export const CompanySchema = new mongoose.Schema({
     createdBy: {
         userId: {type: String},
         email: {type: String}
+    },
+    organization: {
+        orgName: {type: String},
+        organizationId: {type: String}
     }
 },{timestamps:{createdAt:'createdOn',updatedAt:'updatedOn'}})
 

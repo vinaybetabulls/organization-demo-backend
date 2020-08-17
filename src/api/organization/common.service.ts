@@ -21,7 +21,6 @@ export class CommonService {
             ...request,
             createdBy: {...decodeJWT}
         }
-        console.log('payload..', payload);
         const org = new this.organiaztionModel(payload);
         return org.save()
     }
@@ -31,7 +30,6 @@ export class CommonService {
      * @param organizationId 
      */
     async getOrganizationById(organizationId: string) {
-        console.log('organizationId..', organizationId);
         return await this.organiaztionModel.findOne({orgId: organizationId})
     }
 
