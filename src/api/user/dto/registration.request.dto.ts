@@ -14,6 +14,9 @@ export class RegistrationRequestDto {
     @IsNotEmpty()
     @ApiProperty({ name: 'password', required: true })
     password!: string;
+    
+    @ApiProperty({type: 'file', name: 'file', format: 'binary', required: false})
+    file?: any;
 
     userId!: string;
 }

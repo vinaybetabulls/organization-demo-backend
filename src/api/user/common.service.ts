@@ -41,6 +41,7 @@ export class CommonService {
             firstName: userResponse.firstName,
             lastName: userResponse.lastName,
             userId: userResponse.userId,
+            imageURL:''
         }
     }
 
@@ -57,6 +58,16 @@ export class CommonService {
          else {
              throw new HttpException('UserId not Found', HttpStatus.NOT_FOUND)
          }
+    }
+
+        
+    /**
+     * 
+     * @param userId 
+     * @param imageLocation 
+     */
+    async updateUserImageURL(userId: string, imageLocation: string) {
+        return await this.userModel.updateOne({userId}, {$set: {imageURL: imageLocation}})
     }
 
 }

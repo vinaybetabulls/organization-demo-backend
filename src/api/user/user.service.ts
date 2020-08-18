@@ -6,32 +6,48 @@ import { PasswordManipulation } from "src/api/user/passowordHashing";
 import { RegistrationResponseDto } from "./dto/registration.response.dto";
 import { LoginRequestDto } from "./dto/login.request.dto";
 import { LoginResponseDto } from "./dto/login.response.dto";
+import { AwsService } from "../aws/awsS3";
 
 
 @Injectable()
 export class UserService {
 
-    constructor(private commmon: CommonService, private passwordUpdate: PasswordManipulation) { }
+    constructor(private commmon: CommonService, private passwordUpdate: PasswordManipulation, private awsService: AwsService) { }
 
     /**
      * @name registration
      * @param {RegistrationRequestDto} request - RegistrationRequestDTO
      * @returns {RegistrationResponseDto} response
      */
-    async registration(request: RegistrationRequestDto): Promise<RegistrationResponseDto> {
-        const { email, password, firstName, lastName, userId } = request;
+    async registration(request: RegistrationRequestDto, fileBuffer?: any): Promise<RegistrationResponseDto> {
+        try {
 
-        // check if email already exists
-        const isExists = await this.commmon.getUserByEmailId(email);
-        if (isExists) {
-            throw new HttpException('Email already exists', 409);
+            const { email, password, firstName, lastName, userId } = request;
+            let imageLocation;
+
+            // check if email already exists
+            const isExists = await this.commmon.getUserByEmailId(email);
+            if (isExists) {
+                throw new HttpException('Email already exists', HttpStatus.CONFLICT);
+            }
+
+            // convert password to hash
+            const hasedhPassword = await this.passwordUpdate.passwordEncrypt(password);
+
+            //save user
+            const result = await this.commmon.saveUser({ email, password: hasedhPassword, firstName, lastName, userId });
+
+            if (fileBuffer) {
+                // upload file
+                imageLocation = await this.awsService.uploadFile(fileBuffer, result.userId);
+                // update userImage location
+                await this.commmon.updateUserImageURL(result.userId, imageLocation)
+            }
+            result.imageURL = imageLocation ? imageLocation : '';
+            return result
+        } catch (error) {
+            throw error;
         }
-
-        // convert password to hash
-        const hasedhPassword = await this.passwordUpdate.passwordEncrypt(password);
-
-        //save user
-        return await this.commmon.saveUser({ email, password: hasedhPassword, firstName, lastName, userId });
     }
 
 
@@ -76,4 +92,5 @@ export class UserService {
     async profile(userId: string): Promise<any> {
         return await this.commmon.profile(userId)
     }
+
 }

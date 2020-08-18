@@ -25,5 +25,8 @@ export class CompanyRequestDto {
     @IsNotEmptyObject()
     @ApiProperty({name: 'organization'})
     organization!: OrganizationDTO
+
+    @IsNotEmptyObject()
+    @ApiProperty({name: 'companyId'})
     companyId!: string;
 }

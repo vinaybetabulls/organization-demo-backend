@@ -1,23 +1,53 @@
-import { Controller, Post, Body, Get, Param, Headers } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Headers, UseInterceptors, UploadedFile } from "@nestjs/common";
 import { OrganizationRequestDto } from "./dto/organization.request.dto";
-import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiHeader } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiHeader, ApiConsumes } from "@nestjs/swagger";
+import { FileInterceptor } from '@nestjs/platform-express';
+
 import { OrganizationService } from "./organization.service";
-import { PasswordManipulation } from "../user/passowordHashing";
+import { UtilService } from "../utils/util.service";
+import path = require("path");
 
 @ApiTags('Organization')
 @Controller('/organization')
 
 export class OrganizationContoller {
-    constructor(private org: OrganizationService, private jwt: PasswordManipulation) { }
+    constructor(private org: OrganizationService, private utilService: UtilService) { }
 
     @Post('/createOrganization')
     @ApiOperation({ summary: 'Create organization' })
     @ApiHeader({ name: 'token', required: true, description: 'authorization' })
     @ApiBody({ type: OrganizationRequestDto })
-    async createOrganization(@Body() request: OrganizationRequestDto, @Headers('token') authorization) {
+    @ApiConsumes('multipart/form-data')
+    @Post('registration')
+    @UseInterceptors(FileInterceptor('file'))
+    async createOrganization(@Body() request: OrganizationRequestDto, @Headers('token') authorization, @UploadedFile() file: { buffer: Buffer, mimetype: 'image/*', originalname: string }) {
         try {
-            const decodeJWT = await this.jwt.validateJSONToken(authorization);
-            return await this.org.createOrganization(request, decodeJWT.data);
+            const decodeJWT = await this.utilService.validateJSONToken(authorization);
+            let fileBuffer;
+            if (file) {
+                const bufferData = file.buffer;
+                const mimeType = file.mimetype;
+                let isValid;
+                try {
+                    // validate mimeType
+                    console.log(file);
+                    const fileType = path.extname(file.originalname);
+
+                    console.log('mimeType', fileType)
+                    isValid = await this.utilService.validateFile(fileType);
+                } catch (error) {
+                    console.log(error);
+                    throw error;
+                }
+                if (isValid) {
+                    console.log(isValid);
+                    fileBuffer = {
+                        bufferData,
+                        mimeType
+                    }
+                }
+            }
+            return await this.org.createOrganization(request, decodeJWT.data, fileBuffer);
         } catch (error) {
             return error;
         }
@@ -30,7 +60,7 @@ export class OrganizationContoller {
     @ApiParam({ name: 'organizationByid', description: 'Organization Id' })
     async getOrganizationBydId(@Param('organizationByid') organizationByid: string, @Headers('token') authorization) {
         try {
-            await this.jwt.validateJSONToken(authorization);
+            await this.utilService.validateJSONToken(authorization);
             return await this.org.getOrganizationBydId(organizationByid);
         } catch (error) {
             return error;
@@ -43,7 +73,7 @@ export class OrganizationContoller {
     @ApiHeader({ name: 'token', required: true, description: 'authorization' })
     async getAllOrganizationsList(@Headers('token') authorization) {
         try {
-            await this.jwt.validateJSONToken(authorization);
+            await this.utilService.validateJSONToken(authorization);
             return await this.org.getAllOrganizationsList();
         } catch (error) {
             return error;

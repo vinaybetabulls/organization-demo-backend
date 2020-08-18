@@ -4,12 +4,14 @@ import { OrganizationContoller } from "./organization.controller";
 import { OrganizationService } from "./organization.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { CommonService } from "./common.service";
-import { PasswordManipulation } from "../user/passowordHashing";
+import { UtilModule } from "../utils/utiles.module";
+import { UtilService } from "../utils/util.service";
+import { AwsService } from "../aws/awsS3";
 
 @Module({
-    imports: [MongooseModule.forFeature([{name: 'Organization', schema: OrganizationSchema}]) ],
+    imports: [MongooseModule.forFeature([{name: 'Organization', schema: OrganizationSchema}]), UtilModule ],
     controllers: [OrganizationContoller],
-    providers: [OrganizationService, CommonService, PasswordManipulation]
+    providers: [OrganizationService, CommonService, UtilService, AwsService]
 })
 
 export class OrganizationModule{}

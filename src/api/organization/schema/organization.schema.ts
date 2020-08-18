@@ -5,6 +5,7 @@ export const OrganizationSchema = new mongoose.Schema({
     orgLocation: {type: String},
     orgCEO: {type: String},
     orgId: {type: String},
+    imageURL: {type: String, default: ''},
     createdBy: {
         userId: {type:  String},
         email: {type: String}

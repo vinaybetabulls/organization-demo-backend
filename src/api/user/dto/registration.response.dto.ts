@@ -4,4 +4,5 @@ export class RegistrationResponseDto {
     lastName: string;
     email!: string;
     userId!: string;
+    imageURL!: string;
 }

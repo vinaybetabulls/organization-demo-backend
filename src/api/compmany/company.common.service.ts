@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { CompanyRequestDto } from "./dto/company.request.dto";
 import { CompanyInterace } from "./interfaces/company.interface";
 import { InjectModel } from "@nestjs/mongoose";
-import { v4 as uuidv4 } from 'uuid';
+// import { v4 as uuidv4 } from 'uuid';
 import { Model } from "mongoose";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class CompanyCommonService {
      * @param createdBy 
      */
     async createCompany(request: CompanyRequestDto, createdBy: any) {
-        request.companyId = uuidv4();
+        // request.companyId = uuidv4();
         const payload = {...request, createdBy}
         const company = new this.companyModel(payload);
         return await company.save();

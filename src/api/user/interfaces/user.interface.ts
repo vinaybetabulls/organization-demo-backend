@@ -6,4 +6,5 @@ export interface UserInterace extends Document {
   email: string;
   password: string;
   userId: string;
+  imageURL: string;
 }

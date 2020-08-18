@@ -1,23 +1,56 @@
-import { Controller, Post, Body, Get, Param, Headers } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiHeader, ApiParam } from "@nestjs/swagger";
+import { Controller, Post, Body, Get, Param, Headers, UseInterceptors, UploadedFile } from "@nestjs/common";
+import { ApiTags, ApiOperation, ApiBody, ApiResponse, ApiHeader, ApiParam, ApiConsumes } from "@nestjs/swagger";
+import { FileInterceptor } from '@nestjs/platform-express';
+
 
 import { RegistrationRequestDto } from "./dto/registration.request.dto";
 import { UserService } from "./user.service";
 import { LoginRequestDto } from "./dto/login.request.dto";
-import { PasswordManipulation } from "./passowordHashing";
+import path = require('path');
+import { UtilService } from "../utils/util.service";
 
 @ApiTags('User')
 @Controller('/user')
 export class UserController {
-    constructor(private user: UserService, private jwt: PasswordManipulation) { }
+    constructor(private user: UserService, private utilService: UtilService) { }
 
     @ApiOperation({ summary: 'User Registration' })
     @ApiBody({ type: RegistrationRequestDto })
     @ApiResponse({ status: 200, type: RegistrationRequestDto })
+    @ApiConsumes('multipart/form-data')
     @Post('registration')
-    async registration(@Body() request: RegistrationRequestDto) {
-        request.userId = ''
-        return this.user.registration(request);
+    @UseInterceptors(FileInterceptor('file'))
+    async registration(@Body() request: RegistrationRequestDto, @UploadedFile() file: { buffer: Buffer, mimetype: 'image/*', originalname: string }) {
+        try {
+            let fileBuffer;
+            if (file) {
+                const bufferData = file.buffer;
+                const mimeType = file.mimetype;
+                let isValid;
+                try {
+                    // validate mimeType
+                    console.log(file);
+                    const fileType = path.extname(file.originalname);
+
+                    console.log('mimeType', fileType)
+                    isValid = await this.utilService.validateFile(fileType);
+                } catch (error) {
+                    console.log(error);
+                    throw error;
+                }
+                if (isValid) {
+                    console.log(isValid);
+                    fileBuffer = {
+                        bufferData,
+                        mimeType
+                    }
+                }
+            }
+            return this.user.registration(request, fileBuffer);
+        } catch (error) {
+            return error
+        }
+
     }
 
     @ApiOperation({ summary: 'User Login' })
@@ -36,7 +69,7 @@ export class UserController {
     async profile(@Param('userId') userId: string, @Headers('token') authorization) {
         // validate jwt
         try {
-            await this.jwt.validateJSONToken(authorization);
+            await this.utilService.validateJSONToken(authorization);
             const userProfile = this.user.profile(userId)
             return userProfile;
         } catch (error) {

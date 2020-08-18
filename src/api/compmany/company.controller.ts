@@ -1,15 +1,14 @@
-import { ApiTags, ApiOperation, ApiHeader, ApiBody, ApiParam, ApiHeaders } from "@nestjs/swagger";
+import { ApiTags, ApiOperation, ApiHeader, ApiBody, ApiParam } from "@nestjs/swagger";
 import { Controller, Body, Headers, Post, Get, Param } from "@nestjs/common";
 import { CompanyRequestDto } from "./dto/company.request.dto";
-import { PasswordManipulation } from "../user/passowordHashing";
-import { CompanyCommonService } from "./company.common.service";
 import { CompanyService } from "./company.service";
+import { UtilService } from "../utils/util.service";
 
 @ApiTags('Company')
 @Controller('/company')
 
 export class CompanyController {
-    constructor(private companyService: CompanyService, private jwt: PasswordManipulation) { }
+    constructor(private companyService: CompanyService, private jwt: UtilService) { }
 
     @Post('/createCompany')
     @ApiOperation({ summary: 'Create Company' })
@@ -34,6 +33,7 @@ export class CompanyController {
         try {
             const decodeToken = await this.jwt.validateJSONToken(authorization);
             const crearedBy = decodeToken.data;
+            console.log(crearedBy)
             return await this.companyService.getCompanyById(companyId);
         } catch (error) {
             return error
@@ -48,6 +48,7 @@ export class CompanyController {
         try {
             const decodeToken = await this.jwt.validateJSONToken(authorization);
             const crearedBy = decodeToken.data;
+            console.log(crearedBy)
             return await this.companyService.getAllCompaniesList();
         } catch (error) {
             return error
