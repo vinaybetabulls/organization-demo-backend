@@ -25,7 +25,7 @@ export class EmployeeCommonService {
      * 
      * @param employeeId 
      */
-    async getEmployeeById(employeeId: string) {
+    async getEmployeeById(employeeId: string): Promise<any> {
         return await this.employeeModel.findOne({employeeId});
     }
 

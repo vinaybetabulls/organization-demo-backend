@@ -18,7 +18,7 @@ export class DepartmentController {
     async createDepartment(@Body() request: DepartmentRequestDto, @Headers('token') authorization: string) {
         try {
             const jwtDecode = await this.jwt.validateJSONToken(authorization);
-            return await this.createDepartment(request, jwtDecode.data);
+            return await this.departmentService.createDepartment(request, jwtDecode.data);
         } catch (error) {
             return error;
         }

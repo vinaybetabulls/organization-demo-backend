@@ -16,6 +16,8 @@ export class DepartmentService {
      */
     async createDepartment(request: DepartmentRequestDto, createdBy: any) {
         try {
+            const departmentName = (request.departmentName).toLowerCase();
+            await this.commonService.isDepartmentAlreadyExists(departmentName);
             return await this.commonService.createDepartment(request, createdBy);
         } catch (error) {
             throw error;

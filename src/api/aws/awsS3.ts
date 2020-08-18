@@ -9,19 +9,24 @@ const s3 = new AWS.S3({
 
 @Injectable()
 export class AwsService {
+    /**
+     * 
+     * @param fileBuffer 
+     * @param key 
+     * @returns {string} Location
+     */
     public async uploadFile(fileBuffer: any, key: string): Promise<any> {
-        const params = {
-            Body: fileBuffer.bufferData,
-            Bucket: AWS_BUCKET_NAME,
-            Key: key,
-            ContentType: fileBuffer.mimeType
-        };
-
-        console.log('params');
-        console.log(params);
-        const data = await s3.upload(params).promise();
-        console.log('data');
-        console.log(data);
-        return data.Location;
+        try {
+            const params = {
+                Body: fileBuffer.bufferData,
+                Bucket: AWS_BUCKET_NAME,
+                Key: key,
+                ContentType: fileBuffer.mimeType
+            };
+            const data = await s3.upload(params).promise();
+            return data.Location;
+        } catch (error) {
+            throw error;
+        }
     }
 }

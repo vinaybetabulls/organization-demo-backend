@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 export interface OrganizationInterace extends Document {
-  readonly orgName: string;
+  orgName: string;
   readonly orgLocation: string;
   readonly orgCEO: string;
   organizationId: string;

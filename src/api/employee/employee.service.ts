@@ -11,7 +11,7 @@ export class EmployeeService {
      * @param request 
      * @param createdBy 
      */
-    async createEmployee(request: EmployeeRequestDto, createdBy: any) {
+    async createEmployee(request: EmployeeRequestDto, createdBy: any): Promise<any> {
         try {
             return await this.commonSerice.createEmployee(request, createdBy);
         } catch (error) {
@@ -23,7 +23,7 @@ export class EmployeeService {
      * 
      * @param employeeId 
      */
-    async getEmployeeById(employeeId: string) {
+    async getEmployeeById(employeeId: string): Promise<any> {
         try {
             return await this.commonSerice.getEmployeeById(employeeId);
         } catch (error) {
@@ -31,7 +31,10 @@ export class EmployeeService {
         }
     }
 
-    async getAllEmployeesList() {
+    /**
+     * @description get all emplyess list
+     */
+    async getAllEmployeesList(): Promise<any> {
         try {
             return await this.commonSerice.getAllEmployeesList();
         } catch (error) {

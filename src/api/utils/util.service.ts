@@ -3,13 +3,13 @@ import * as bcrypt from 'bcryptjs';
 import *as jwt from 'jsonwebtoken';
 
 @Injectable()
-export class UtilService{
+export class UtilService {
 
-/**
-     * 
-     * @param mimetype 
-     * @description validate file mimeType
-     */
+    /**
+         * 
+         * @param mimetype 
+         * @description validate file mimeType
+         */
     async validateFile(mimetype) {
         const allowedExtension = ['.jpeg', '.jpg', '.png', '.gif', '.bmp'];
         let isValidFile = false;
@@ -21,9 +21,7 @@ export class UtilService{
                 break;
             }
         }
-
         if (!isValidFile) {
-            console.log('not validat..')
             throw new HttpException('Allowed Extensions are : *.' + allowedExtension.join(', *.'), HttpStatus.BAD_REQUEST);
         }
 
@@ -36,7 +34,7 @@ export class UtilService{
      * @returns {string} hashedPassword
      */
     async passwordEncrypt(password: string) {
-        const saltNumber = parseInt(process.env.SALT,10)
+        const saltNumber = parseInt(process.env.SALT, 10)
         const salt = bcrypt.genSaltSync(saltNumber);
         const hashedPassword = bcrypt.hashSync(password, salt);
         return hashedPassword;
@@ -56,22 +54,22 @@ export class UtilService{
      * @param {any} user
      */
     async generateJSONToken(user: any) {
-       return jwt.sign({
+        return jwt.sign({
             data: user
-          }, process.env.JWT_SECRETE_KEY, { expiresIn: '1h' });
+        }, process.env.JWT_SECRETE_KEY, { expiresIn: '1h' });
     }
 
     /**
      * 
      * @param userAuthToken 
-     * 
+     * @returns string
      */
-    async validateJSONToken(userAuthToken): Promise<string | any> {
+    async validateJSONToken(userAuthToken): Promise<any> {
         try {
             return jwt.verify(userAuthToken, process.env.JWT_SECRETE_KEY)
         } catch (error) {
             throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
         }
-        
+
     }
 }

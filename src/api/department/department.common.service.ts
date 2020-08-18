@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { Model } from "mongoose";
 import { DepartmentInterace } from "./interface/department.interface.dto";
 import { InjectModel } from "@nestjs/mongoose";
@@ -18,6 +18,7 @@ export class DepartmentCommonService {
      */
     async createDepartment(request: DepartmentRequestDto, createdBy: any) {
         request.departmentId = uuidv4();
+        request.departmentName = (request.departmentName).toLowerCase();
         const payload = { ...request, createdBy };
         const department = new this.departmentModel(payload);
         return await department.save();
@@ -36,5 +37,16 @@ export class DepartmentCommonService {
      */
     async getAllDepartmentsList() {
         return await this.departmentModel.find({}).sort({departmentName: 1});
+    }
+
+    /**
+     * 
+     * @param departmentName 
+     * @returns boolean
+     */
+    async isDepartmentAlreadyExists(departmentName: string) {
+        const department =  await this.departmentModel.find({departmentName: departmentName});
+        if(department.length > 0) throw new HttpException('Department already exists', HttpStatus.CONFLICT);
+        return false;
     }
 }

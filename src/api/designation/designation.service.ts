@@ -17,6 +17,8 @@ export class DesignationService {
      */
     async createDesignation(request: DesignationRequestDto, createdBy: any) {
         try {
+            const designationName = (request.designationName).toLowerCase();
+            await this.commonService.isDesignationAlredyExists(designationName);
             return await this.commonService.createDesignation(request, createdBy);
         } catch (error) {
             throw error;

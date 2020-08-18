@@ -30,17 +30,12 @@ export class OrganizationContoller {
                 let isValid;
                 try {
                     // validate mimeType
-                    console.log(file);
                     const fileType = path.extname(file.originalname);
-
-                    console.log('mimeType', fileType)
                     isValid = await this.utilService.validateFile(fileType);
                 } catch (error) {
-                    console.log(error);
                     throw error;
                 }
                 if (isValid) {
-                    console.log(isValid);
                     fileBuffer = {
                         bufferData,
                         mimeType

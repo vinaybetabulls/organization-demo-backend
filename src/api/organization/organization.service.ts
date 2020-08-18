@@ -14,6 +14,8 @@ export class OrganizationService {
      */
     async createOrganization(request: OrganizationRequestDto, decodeJWT: any, fileBuffer: any): Promise<any> {
         try {
+            const orgnaizationName = request.orgName;
+            await this.common.isOrganizationALreadyExists(orgnaizationName);
             const result =  await this.common.createConversation(request, decodeJWT);
             let imageURl;
             if (fileBuffer) {

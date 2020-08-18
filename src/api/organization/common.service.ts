@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { OrganizationRequestDto } from "./dto/organization.request.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
@@ -17,6 +17,7 @@ export class CommonService {
      */
     async createConversation(request: OrganizationRequestDto, decodeJWT: any): Promise<any> {
         // request.orgId = uuidv4();
+        request.orgName = (request.orgName).toLowerCase()
         const payload = {
             ...request,
             createdBy: {...decodeJWT}
@@ -47,4 +48,16 @@ export class CommonService {
         return await this.organiaztionModel.updateOne({orgId: organizationId}, {$set: {imageURL: imageLocation}})
     }
 
+    /**
+     * 
+     * @param orgName 
+     * @returns boolean
+     */
+    async isOrganizationALreadyExists(orgName: string) {
+        const isOrgExists =  await this.organiaztionModel.find({orgName: orgName.toLowerCase()});
+        if(isOrgExists.length > 0 ) {
+            throw new HttpException('Orgnization already exists', HttpStatus.CONFLICT);
+        }
+        return false;
+    }
 }

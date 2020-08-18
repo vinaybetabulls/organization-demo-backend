@@ -33,7 +33,6 @@ export class CompanyController {
         try {
             const decodeToken = await this.jwt.validateJSONToken(authorization);
             const crearedBy = decodeToken.data;
-            console.log(crearedBy)
             return await this.companyService.getCompanyById(companyId);
         } catch (error) {
             return error
@@ -48,7 +47,6 @@ export class CompanyController {
         try {
             const decodeToken = await this.jwt.validateJSONToken(authorization);
             const crearedBy = decodeToken.data;
-            console.log(crearedBy)
             return await this.companyService.getAllCompaniesList();
         } catch (error) {
             return error
