@@ -35,6 +35,6 @@ export class DepartmentCommonService {
      * 
      */
     async getAllDepartmentsList() {
-        return await this.departmentModel.find({});
+        return await this.departmentModel.find({}).sort({departmentName: 1});
     }
 }

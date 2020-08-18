@@ -30,6 +30,6 @@ export class CompanyCommonService {
     }
 
     async getAllCompaniesList() {
-        return await this.companyModel.find({});
+        return await this.companyModel.find({}).sort({_id: -1});
     }
 }

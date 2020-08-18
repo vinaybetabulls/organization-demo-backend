@@ -38,6 +38,6 @@ export class DesignationCommonService {
      * 
      */
     async getAllDesignationsList() {
-        return await this.designationModel.find({});
+        return await this.designationModel.find({}).sort({designationtName: 1});
     }
 }

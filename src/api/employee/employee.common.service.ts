@@ -30,6 +30,6 @@ export class EmployeeCommonService {
     }
 
     async getAllEmployeesList() {
-        return await this.employeeModel.find({});
+        return await this.employeeModel.find({}).sort({employeeFirstName: 1});
     }
 }

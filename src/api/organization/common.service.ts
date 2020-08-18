@@ -34,7 +34,7 @@ export class CommonService {
     }
 
     async getAllOrganizationsList() {
-        return await this.organiaztionModel.find({}).sort({_id: 1});
+        return await this.organiaztionModel.find({}).sort({_id: -1});
     }
 
        
