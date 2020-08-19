@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Headers, UseInterceptors, UploadedFile } from "@nestjs/common";
+import { Controller, Post, Body, Get, Param, Headers, UseInterceptors, UploadedFile, Delete } from "@nestjs/common";
 import { OrganizationRequestDto } from "./dto/organization.request.dto";
 import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiHeader, ApiConsumes } from "@nestjs/swagger";
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -74,5 +74,19 @@ export class OrganizationContoller {
             return error;
         }
 
+    }
+
+    @Delete('/deleteOrganizationById/:organizationId')
+    @ApiOperation({summary: 'Delete organization by Id'})
+    @ApiHeader({name: 'token', required: true, description: 'authorizaiton'})
+    @ApiParam({name: 'organizationId', required: true, description: 'Organization Id'})
+    async deleteOrganizationById(@Param('organizationId') organizationId: string, @Headers('token') authorization: string){
+        try {
+            await this.utilService.validateJSONToken(authorization);
+            console.log('organizationId..', organizationId);
+            return await this.org.deleteOrganizationById(organizationId);
+        } catch (error) {
+            return error;
+        }
     }
 }

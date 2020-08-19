@@ -29,4 +29,18 @@ export class AwsService {
             throw error;
         }
     }
+
+    public async deleteFile(key: string): Promise<any> {
+        try {
+            const params = {
+                Bucket: AWS_BUCKET_NAME,
+                Key: key
+            }
+            const response =  await s3.deleteObject(params).promise();
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 }

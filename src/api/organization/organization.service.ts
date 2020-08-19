@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { OrganizationRequestDto } from "./dto/organization.request.dto";
 import { CommonService } from "./common.service";
 import { AwsService } from "../aws/awsS3";
+import { throws } from "assert";
 
 
 @Injectable()
@@ -46,6 +47,21 @@ export class OrganizationService {
     async getAllOrganizationsList(): Promise<any> {
         try {
             return await this.common.getAllOrganizationsList();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * 
+     * @param orgId 
+     */
+    async deleteOrganizationById(orgId: string): Promise<any> {
+        try {
+            const deleteResponse = await this.common.deleteOrganizationById(orgId);
+            // delete orgnization image from s3
+            await this.awsService.deleteFile(orgId);
+            return deleteResponse;
         } catch (error) {
             throw error;
         }

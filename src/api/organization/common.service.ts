@@ -3,6 +3,7 @@ import { OrganizationRequestDto } from "./dto/organization.request.dto";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { OrganizationInterace } from "./interfaces/organization.interface";
+import { throws } from "assert";
 
 // import { v4 as uuidv4 } from 'uuid';
 
@@ -59,5 +60,15 @@ export class CommonService {
             throw new HttpException('Orgnization already exists', HttpStatus.CONFLICT);
         }
         return false;
+    }
+
+
+    async deleteOrganizationById(orgId: string) {
+        try {
+            return await this.organiaztionModel.deleteOne({orgId});
+        } catch (error) {
+            console.log(error);
+            throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
