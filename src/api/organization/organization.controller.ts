@@ -83,7 +83,6 @@ export class OrganizationContoller {
     async deleteOrganizationById(@Param('organizationId') organizationId: string, @Headers('token') authorization: string){
         try {
             await this.utilService.validateJSONToken(authorization);
-            console.log('organizationId..', organizationId);
             return await this.org.deleteOrganizationById(organizationId);
         } catch (error) {
             return error;

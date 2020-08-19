@@ -1,8 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { OrganizationRequestDto } from "./dto/organization.request.dto";
 import { CommonService } from "./common.service";
 import { AwsService } from "../aws/awsS3";
-import { throws } from "assert";
 
 
 @Injectable()
@@ -58,6 +57,12 @@ export class OrganizationService {
      */
     async deleteOrganizationById(orgId: string): Promise<any> {
         try {
+            // validate organizationId exists or not
+            const orgExists = await this.common.getOrganizationById(orgId);
+            if(!orgExists) {
+                throw new HttpException('Organization Id not exists', HttpStatus.NOT_FOUND);
+            }
+            // delete organization from data base
             const deleteResponse = await this.common.deleteOrganizationById(orgId);
             // delete orgnization image from s3
             await this.awsService.deleteFile(orgId);

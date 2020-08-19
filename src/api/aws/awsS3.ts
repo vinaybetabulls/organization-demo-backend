@@ -30,6 +30,10 @@ export class AwsService {
         }
     }
 
+    /**
+     * 
+     * @param key 
+     */
     public async deleteFile(key: string): Promise<any> {
         try {
             const params = {
