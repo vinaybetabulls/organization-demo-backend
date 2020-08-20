@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { DepartmentCommonService } from "./department.common.service";
 import { DepartmentRequestDto } from "./dto/department.request.dto";
 
@@ -30,7 +30,9 @@ export class DepartmentService {
      */
     async getDepartmentById(departmentId: string) {
         try {
-            return await this.commonService.getDepartmentById(departmentId);
+            const department = await this.commonService.getDepartmentById(departmentId);
+            if (!department) throw new HttpException('Department Id Not Found', HttpStatus.NOT_FOUND);
+            else return department;
         } catch (error) {
             throw error;
         }
@@ -42,5 +44,15 @@ export class DepartmentService {
         } catch (error) {
             throw error;
         }
+    }
+
+    /**
+     * 
+     * @param departmentId 
+     */
+    async deleteDepartmentById(departmentId: string): Promise<any> {
+        const department = await this.commonService.getDepartmentById(departmentId);
+        if (!department) throw new HttpException('Department Id Not Found', HttpStatus.NOT_FOUND);
+        return await this.commonService.deleteDepartmentById(departmentId);
     }
 }

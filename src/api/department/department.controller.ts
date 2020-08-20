@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers, Get, Param } from "@nestjs/common";
+import { Controller, Post, Body, Headers, Get, Param, Delete } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiHeader, ApiBody, ApiParam } from "@nestjs/swagger";
 import { DepartmentService } from "./department.service";
 import { DepartmentRequestDto } from "./dto/department.request.dto";
@@ -51,4 +51,16 @@ export class DepartmentController {
         }
     }
 
+    @Delete('/deleteDepartmentById/:departmentId')
+    @ApiOperation({summary: 'Delete Department By Id'})
+    @ApiParam({name: 'departmentId', description: 'Department Id'})
+    @ApiHeader({name: 'token', required: true, description: 'authorization'})
+    async deleteDepartmentById(@Param('departmentId') departmentId: string, @Headers('token') authorization: string) {
+        try {
+            await this.jwt.validateJSONToken(authorization);
+            return await this.departmentService.deleteDepartmentById(departmentId);
+        } catch (error) {
+            throw error;
+        }
+    }
 }

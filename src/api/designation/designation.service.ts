@@ -1,7 +1,7 @@
 
-import {  DesignationCommonService } from "./designation.common.service";
-import {  DesignationRequestDto } from "./dto/designation.request.dto";
-import { Injectable } from "@nestjs/common";
+import { DesignationCommonService } from "./designation.common.service";
+import { DesignationRequestDto } from "./dto/designation.request.dto";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 
 
 
@@ -27,11 +27,13 @@ export class DesignationService {
 
     /**
      * 
-     * @param designationtId 
+     * @param designationId 
      */
-    async getDesignationById(designationtId: string) {
+    async getDesignationById(designationId: string) {
         try {
-            return await this.commonService.getDesignationById(designationtId);
+            const designation =  await this.commonService.getDesignationById(designationId);
+            if (!designation) throw new HttpException('Designation not found', HttpStatus.NOT_FOUND);
+            else return designation;
         } catch (error) {
             throw error;
         }
@@ -40,6 +42,20 @@ export class DesignationService {
     async getAllDesignationsList() {
         try {
             return this.commonService.getAllDesignationsList();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * 
+     * @param designationId 
+     */
+    async deleteDesignationById(designationId: string): Promise<any> {
+        try {
+            const isExists = await this.commonService.getDesignationById(designationId);
+            if (!isExists) throw new HttpException('Designation not found', HttpStatus.NOT_FOUND);
+            return await this.commonService.deleteDesignationById(designationId);
         } catch (error) {
             throw error;
         }

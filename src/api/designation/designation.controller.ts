@@ -1,5 +1,5 @@
 import { ApiTags, ApiOperation, ApiHeader, ApiBody, ApiParam } from "@nestjs/swagger";
-import { Controller, Post, Headers, Body, Get, Param} from "@nestjs/common";
+import { Controller, Post, Headers, Body, Get, Param, Delete} from "@nestjs/common";
 import { DesignationService } from "./designation.service";
 import { DesignationRequestDto } from "./dto/designation.request.dto";
 import { UtilService } from "../utils/util.service";
@@ -26,7 +26,7 @@ export class DesignationController {
     }
 
     @Get('/getDesignationById/:designationId')
-    @ApiOperation({summary: 'Get Department By Id'})
+    @ApiOperation({summary: 'Get Designation By Id'})
     @ApiParam({name: 'designationId', description: 'Designation Id'})
     @ApiHeader({name: 'token', required: true, description: 'authorization'})
 
@@ -47,6 +47,19 @@ export class DesignationController {
         try {
             await this.jwt.validateJSONToken(authorization);
             return await this.designationService.getAllDesignationsList();
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Delete('/deleteDesignationById/:designationId')
+    @ApiOperation({summary: 'Delete Designation By Id'})
+    @ApiParam({name: 'designationId', description: 'Designation Id'})
+
+    async deleteDesignationById(@Param('designationId') designationId, @Headers('token') authorization: string) {
+        try {
+            await this.jwt.validateJSONToken(authorization);
+            return await this.designationService.deleteDesignationById(designationId);
         } catch (error) {
             throw error;
         }

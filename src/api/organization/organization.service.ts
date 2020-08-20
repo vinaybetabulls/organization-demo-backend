@@ -37,7 +37,9 @@ export class OrganizationService {
      */
     async getOrganizationBydId(organizationId: string): Promise<any> {
         try {
-            return await this.common.getOrganizationById(organizationId);
+            const organization =  await this.common.getOrganizationById(organizationId);
+            if(!organization) throw new HttpException('Organization Id Not Found', HttpStatus.NOT_FOUND);
+            else return organization;
         } catch (error) {
             throw error;
         }

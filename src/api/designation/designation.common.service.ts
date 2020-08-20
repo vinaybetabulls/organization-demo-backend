@@ -52,4 +52,8 @@ export class DesignationCommonService {
         if(designation.length > 0) throw new HttpException('Designation already exists', HttpStatus.CONFLICT);
         return false;
     }
+
+    async deleteDesignationById(designationId: string) {
+        return await this.designationModel.deleteOne({designationId});
+    }
 }

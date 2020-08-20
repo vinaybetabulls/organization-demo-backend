@@ -49,4 +49,12 @@ export class DepartmentCommonService {
         if(department.length > 0) throw new HttpException('Department already exists', HttpStatus.CONFLICT);
         return false;
     }
+
+    /**
+     * 
+     * @param departmentId 
+     */
+    async deleteDepartmentById(departmentId: string) {
+        return await this.departmentModel.deleteOne({departmentId});
+    }
 }

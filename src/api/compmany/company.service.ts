@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { CompanyRequestDto } from "./dto/company.request.dto";
 import { CompanyCommonService } from "./company.common.service";
 
 
 @Injectable()
 export class CompanyService {
-    constructor(private commonSerice: CompanyCommonService){}
+    constructor(private commonSerice: CompanyCommonService) { }
 
     /**
      * 
@@ -26,7 +26,9 @@ export class CompanyService {
      */
     async getCompanyById(companyId: string) {
         try {
-            return await this.commonSerice.getCompanyById(companyId);
+            const company = await this.commonSerice.getCompanyById(companyId);
+            if (!company) throw new HttpException('COmpany Id Not Found', HttpStatus.NOT_FOUND);
+            else return company;
         } catch (error) {
             throw error;
         }

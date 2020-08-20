@@ -1,10 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { EmployeeCommonService } from "./employee.common.service";
 import { EmployeeRequestDto } from "./dto/employee.request.dto";
 
 @Injectable()
 export class EmployeeService {
-    constructor(private commonSerice: EmployeeCommonService) {}
+    constructor(private commonSerice: EmployeeCommonService) { }
 
     /**
      * 
@@ -25,7 +25,9 @@ export class EmployeeService {
      */
     async getEmployeeById(employeeId: string): Promise<any> {
         try {
-            return await this.commonSerice.getEmployeeById(employeeId);
+            const employee = await this.commonSerice.getEmployeeById(employeeId);
+            if (!employee) throw new HttpException('Emplyee Id Not Found', HttpStatus.NOT_FOUND);
+            return employee;
         } catch (error) {
             throw error;
         }
