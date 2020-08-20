@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 export const DesignationSchema = new mongoose.Schema({
-    designationtName : {type: String},
+    designationName : {type: String},
     designationId: {type: String},
     createdBy: {
         userId: {type: String},

@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 
 export interface DesignationInterace extends Document {
-  readonly designationName: string;
+  designationName: string;
   designationId: string;
   createdBy: {
       userId: string,
