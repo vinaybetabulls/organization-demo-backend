@@ -10,7 +10,7 @@ export const CompanySchema = new mongoose.Schema({
     },
     organization: {
         orgName: {type: String},
-        organizationId: {type: String}
+        orgId: {type: String}
     }
 },{timestamps:{createdAt:'createdOn',updatedAt:'updatedOn'}})
 

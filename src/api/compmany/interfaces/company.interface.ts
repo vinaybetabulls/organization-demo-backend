@@ -6,7 +6,7 @@ export interface CompanyInterace extends Document {
   companyId: string;
   readonly organization: {
       readonly orgName: string,
-      readonly organizationId: string
+      readonly orgId: string
   }
   createdBy: {
       userId: string,

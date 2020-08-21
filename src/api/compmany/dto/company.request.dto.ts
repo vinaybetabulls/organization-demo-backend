@@ -5,8 +5,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class OrganizationDTO {
     @IsString()
-    @ApiProperty({name: 'organizationId'})
-    organizationId!: string;
+    @ApiProperty({name: 'orgId'})
+    orgId!: string;
 
     @IsString()
     @ApiProperty({name: 'orgName'})
@@ -26,7 +26,7 @@ export class CompanyRequestDto {
     @ApiProperty({name: 'organization'})
     organization!: OrganizationDTO
 
-    @IsNotEmptyObject()
+    @IsString()
     @ApiProperty({name: 'companyId'})
     companyId!: string;
 }
