@@ -56,7 +56,7 @@ export class UtilService {
     async generateJSONToken(user: any) {
         return jwt.sign({
             data: user
-        }, process.env.JWT_SECRETE_KEY, { expiresIn: '1h' });
+        }, process.env.JWT_SECRETE_KEY, { expiresIn: '24h' });
     }
 
     /**

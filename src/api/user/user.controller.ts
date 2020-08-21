@@ -68,7 +68,7 @@ export class UserController {
             const userProfile = this.user.profile(userId)
             return userProfile;
         } catch (error) {
-            return error;
+            throw error;
         }
 
     }

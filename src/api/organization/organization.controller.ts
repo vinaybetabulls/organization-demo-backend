@@ -44,7 +44,7 @@ export class OrganizationContoller {
             }
             return await this.org.createOrganization(request, decodeJWT.data, fileBuffer);
         } catch (error) {
-            return error;
+            throw error;
         }
 
     }
@@ -58,7 +58,7 @@ export class OrganizationContoller {
             await this.utilService.validateJSONToken(authorization);
             return await this.org.getOrganizationBydId(organizationByid);
         } catch (error) {
-            return error;
+            throw error;
         }
 
     }
@@ -71,7 +71,7 @@ export class OrganizationContoller {
             await this.utilService.validateJSONToken(authorization);
             return await this.org.getAllOrganizationsList();
         } catch (error) {
-            return error;
+            throw error;
         }
 
     }
@@ -85,7 +85,7 @@ export class OrganizationContoller {
             await this.utilService.validateJSONToken(authorization);
             return await this.org.deleteOrganizationById(organizationId);
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 }

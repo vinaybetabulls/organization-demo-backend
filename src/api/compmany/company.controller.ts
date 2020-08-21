@@ -21,7 +21,7 @@ export class CompanyController {
             const crearedBy = decodeToken.data;
             return await this.companyService.createCompany(request, crearedBy);
         } catch (error) {
-            return error
+            throw error
         }
     }
 
@@ -35,7 +35,7 @@ export class CompanyController {
             const crearedBy = decodeToken.data;
             return await this.companyService.getCompanyById(companyId);
         } catch (error) {
-            return error
+            throw error
         }
     }
 
@@ -49,7 +49,7 @@ export class CompanyController {
             const crearedBy = decodeToken.data;
             return await this.companyService.getAllCompaniesList();
         } catch (error) {
-            return error
+            throw error
         }
     }
 }

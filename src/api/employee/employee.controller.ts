@@ -21,7 +21,7 @@ export class EmployeeController {
             const decodeToken = await this.utilService.validateJSONToken(authorization);
             return this.employeeService.createEmployee(request, decodeToken.data);
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 
@@ -34,7 +34,7 @@ export class EmployeeController {
             await this.utilService.validateJSONToken(authorization);
             return this.employeeService.getEmployeeById(employeeId);
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 
@@ -46,7 +46,7 @@ export class EmployeeController {
             await this.utilService.validateJSONToken(authorization);
             return await this.employeeService.getAllEmployeesList();
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 }

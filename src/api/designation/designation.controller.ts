@@ -35,7 +35,7 @@ export class DesignationController {
             await this.jwt.validateJSONToken(authorization);
             return await this.designationService.getDesignationById(designationId);
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 

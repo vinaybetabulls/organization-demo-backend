@@ -20,7 +20,7 @@ export class DepartmentController {
             const jwtDecode = await this.jwt.validateJSONToken(authorization);
             return await this.departmentService.createDepartment(request, jwtDecode.data);
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 
@@ -34,7 +34,7 @@ export class DepartmentController {
             await this.jwt.validateJSONToken(authorization);
             return await this.departmentService.getDepartmentById(departmentId);
         } catch (error) {
-            return error;
+            throw error;
         }
     }
 
