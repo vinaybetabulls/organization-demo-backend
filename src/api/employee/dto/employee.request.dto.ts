@@ -40,7 +40,6 @@ export class EmployeeRequestDto {
     @ApiProperty({name: 'employeeEmail'})
     employeeEmail!: string;
 
-    @IsString()
     @ApiProperty({name: 'employeeLocation'})
     employeeLocation!: string;
 

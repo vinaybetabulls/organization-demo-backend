@@ -16,6 +16,7 @@ export class EmployeeCommonService {
      */
     async createEmployee(request: EmployeeRequestDto, createdBy: any) {
         request.employeeId = uuidv4();
+        request.employeeLocation = 'Hyderabad';
         const payload = { ...request, createdBy };
         const employee = new this.employeeModel(payload);
         return await employee.save();

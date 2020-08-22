@@ -5,7 +5,7 @@ export interface EmployeeInterace extends Document {
     readonly employeeFirstName: string;
     readonly employeeLastName: string;
     readonly employeeEmail: string;
-    readonly employeeLocation: string;
+    employeeLocation: string;
     readonly phoneNumber: string;
     readonly company: {
         readonly companyName: string,
