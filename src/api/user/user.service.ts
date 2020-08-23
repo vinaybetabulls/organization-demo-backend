@@ -7,12 +7,13 @@ import { RegistrationResponseDto } from "./dto/registration.response.dto";
 import { LoginRequestDto } from "./dto/login.request.dto";
 import { LoginResponseDto } from "./dto/login.response.dto";
 import { AwsService } from "../aws/awsS3";
+import { UtilService } from "../utils/util.service";
 
 
 @Injectable()
 export class UserService {
 
-    constructor(private commmon: CommonService, private passwordUpdate: PasswordManipulation, private awsService: AwsService) { }
+    constructor(private commmon: CommonService, private utilService: UtilService, private awsService: AwsService) { }
 
     /**
      * @name registration
@@ -32,7 +33,7 @@ export class UserService {
             }
 
             // convert password to hash
-            const hasedhPassword = await this.passwordUpdate.passwordEncrypt(password);
+            const hasedhPassword = await this.utilService.passwordEncrypt(password);
 
             //save user
             const result = await this.commmon.saveUser({ email, password: hasedhPassword, firstName, lastName, userId });
@@ -66,7 +67,7 @@ export class UserService {
         }
 
         // compare passowrd
-        const decryptPassword = await this.passwordUpdate.decryptPassword(password, user.password);
+        const decryptPassword = await this.utilService.decryptPassword(password, user.password);
         if (!decryptPassword) {
             throw new HttpException('Password not valid', HttpStatus.BAD_REQUEST)
         }
@@ -76,11 +77,11 @@ export class UserService {
             email: user.email,
             userId: user.userId,
         }
-        const jwt = await this.passwordUpdate.generateJSONToken(payload);
+        const jwt = await this.utilService.generateJSONToken(payload);
         return {
             email: user.email,
             jwt: jwt,
-            userId: user._id
+            userId: user.userId
         }
     }
 
